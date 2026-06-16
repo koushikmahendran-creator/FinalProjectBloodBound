@@ -3,6 +3,18 @@
    Sign in / Create Account / Reset Password logic
 ═══════════════════════════════════════════════════════════════ */
 
+/* ── GOOGLE IDENTITY INITIALIZATION ── */
+window.onload = function () {
+  google.accounts.id.initialize({
+    client_id: "881716006091-765b765b765b765b765b765b765b765b.apps.googleusercontent.com",
+    callback: handleGoogleSignIn
+  });
+  const signinBtn = document.getElementById("google-signin-btn");
+  if (signinBtn) {
+    google.accounts.id.renderButton(signinBtn, { theme: "filled_black", size: "large", width: "340" });
+  }
+};
+
 let currentAuthTab = 'signin';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -237,7 +249,6 @@ function handleEmailRegister(event) {
 /* ── GOOGLE AUTHENTICATION TOKEN PARSER ── */
 function handleGoogleSignIn(response) {
   try {
-    // 1. Break down and securely decode the Google cryptographic web token JWT
     const base64Url = response.credential.split('.')[1];
     const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
     const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
@@ -246,20 +257,16 @@ function handleGoogleSignIn(response) {
 
     const googleUser = JSON.parse(jsonPayload);
     
-    // 2. Extract profile variables and clean special characters out of the name signature
     const username = googleUser.name.replace(/[^a-zA-Z0-9_]/g, ''); 
     const profilePicUrl = googleUser.picture;
 
-    // 3. Keep the persistent active state logged in inside local data storage
     localStorage.setItem('bb_current_user', username);
     localStorage.setItem(`bb_avatar_${username}`, profilePicUrl);
 
-    // 4. Update core engine tracking layers if running
     if (window.BB && typeof window.BB.setCurrentUser === 'function') {
       window.BB.setCurrentUser(username, true);
     }
 
-    // 5. Instantly trigger profile state UI update template
     showSuccessState(username, false, false);
 
   } catch (error) {
