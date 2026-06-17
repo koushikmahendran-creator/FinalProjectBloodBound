@@ -398,4 +398,4 @@ class Boss {
 }
 
 window.BOSS_DEFS = BOSS_DEFS;
-window.Boss = Boss;ok 
+window.Boss = Boss;
