@@ -6,7 +6,7 @@
 /* ── GOOGLE IDENTITY INITIALIZATION ── */
 window.onload = function () {
   google.accounts.id.initialize({
-   client_id: "881716006091-v1slg98bagh9dmpa8l8lk5taqbkrts1c.apps.googleusercontent.com",
+    client_id: "881716006091-v1slg98bagh9dmpa8l8lk5taqbkrts1c.apps.googleusercontent.com",
     callback: handleGoogleSignIn
   });
   const signinBtn = document.getElementById("google-signin-btn");
